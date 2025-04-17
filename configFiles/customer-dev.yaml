@@ -1,12 +1,12 @@
 server:
-  port: 8082
+  port: 8081
 
 spring:
   application:
-    name: product
+    name: customer
   datasource:
     username: root
-    url: jdbc:mysql://localhost:3307/microservicesTp1products?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3307/microservicesTp1Customer?createDatabaseIfNotExist=true
     password: root
   jpa:
     hibernate:
@@ -17,13 +17,16 @@ spring:
         format_sql: true
     show-sql: true
   boot:
-      admin:
-        client:
-          url: http://localhost:8088
+    admin:
+      client:
+        url : http://localhost:8088
   cloud:
     config:
       uri: http://localhost:8888
-      enabled: false
+      enabled: true
+      profile: dev
+  config:
+    import: optional:configserver:http://localhost:8888
 eureka:
   client:
     serviceUrl:

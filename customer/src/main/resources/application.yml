@@ -23,7 +23,10 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-      enabled: false
+      enabled: true
+      profile: dev
+  config:
+    import: optional:configserver:http://localhost:8888
 eureka:
   client:
     serviceUrl:

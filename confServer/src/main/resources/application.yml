@@ -9,9 +9,11 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/ZARAYACH/microservicesTp/configFiles
+          uri: https://github.com/ZARAYACH/microservicesTp.git
           clone-on-start: true
           default-label: master
+          search-paths: configFiles
+
   security:
     user:
       password: admin
