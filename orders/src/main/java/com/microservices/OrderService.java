@@ -25,7 +25,10 @@ public class OrderService {
                         .build()
         ).collect(Collectors.toList());
         validateOrderRequest(orderRequest.customerId(), orderRequest.orderItems());
-        Order order = Order.builder().customerId(orderRequest.customerId()).orderItems(orderItems).build();
+        Order order = Order.builder()
+                .customerId(orderRequest.customerId())
+                .orderItems(orderItems)
+                .build();
         orderItems.forEach(orderItem -> orderItem.setOrder(order));
         return orderRepository.save(order);
     }

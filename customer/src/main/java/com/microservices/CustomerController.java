@@ -20,7 +20,7 @@ public class CustomerController {
     public ResponseEntity<Customer> registerCustomer(@RequestBody CustomerRequest customerRequest) {
         log.info("new customer registration {}", customerRequest);
         Customer newCustomer = customerService.createCustomer(customerRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newCustomer);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(newCustomer);
     }
 
     @GetMapping

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@FeignClient(name = "CUSTOMER")
+@FeignClient(name = "CUSTOMER", url = "${}")
 public interface CustomerClient {
 
     @GetMapping("/api/v1/customers")
