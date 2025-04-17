@@ -6,4 +6,10 @@ spring:
     config:
       server:
         git:
-          uri: http://github.com/ZARAYACH/cofig.git
+          uri: https://github.com/ZARAYACH/microservicesTp.git
+          clone-on-start: true
+          default-label: master
+  security:
+    user:
+      password: admin
+      name: admin
