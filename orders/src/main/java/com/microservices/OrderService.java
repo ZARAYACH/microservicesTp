@@ -1,9 +1,7 @@
 package com.microservices;
 
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +13,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CustomerClient customerClient;
+    private final ProductClient productClient;
+
     // Create a new order
     public Order createOrder(OrderRequest orderRequest) throws Exception {
         List<OrderItem> orderItems = orderRequest.orderItems().stream().map(orderItemRequest ->
@@ -24,14 +24,18 @@ public class OrderService {
                         .quantity(orderItemRequest.quantity())
                         .build()
         ).collect(Collectors.toList());
-        validateCustomer(orderRequest.customerId());
+        validateOrderRequest(orderRequest.customerId(), orderRequest.orderItems());
         Order order = Order.builder().customerId(orderRequest.customerId()).orderItems(orderItems).build();
         orderItems.forEach(orderItem -> orderItem.setOrder(order));
         return orderRepository.save(order);
     }
 
-    private void validateCustomer(Integer customerId) throws Exception {
+    private void validateOrderRequest(Integer customerId, List<OrderItemRequest> orderItems) throws Exception {
         customerClient.findById(customerId).orElseThrow(() -> new Exception("Customer not found"));
+        for (OrderItemRequest orderItem : orderItems) {
+            productClient.findById(orderItem.productId()).orElseThrow(() -> new Exception("Product not found"));
+        }
+
     }
 
     // Get all orders
