@@ -6,7 +6,7 @@ spring:
     name: order
   datasource:
     username: ${SPRING_DATASOURCE_USERNAME:root}
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://host.docker.internal:3307/microservicesTp1Orders}?createDatabaseIfNotExist=true
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/microservicesTp1Orders}?createDatabaseIfNotExist=true
     password: ${SPRING_DATASOURCE_PASSWORD:root}
   jpa:
     hibernate:
