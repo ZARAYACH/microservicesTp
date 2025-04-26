@@ -1,16 +1,16 @@
 server:
-  port: 8082
+  port: ${SERVER_PORT:8082}
 
 spring:
   application:
     name: product
   datasource:
-    username: root
-    url: jdbc:mysql://localhost:3307/microservicesTp1products?createDatabaseIfNotExist=true
-    password: root
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/microservicesTp1Products}?createDatabaseIfNotExist=true
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect

@@ -1,6 +1,5 @@
 server:
-  port: 8888
-
+  port: ${SERVER_PORT:8888}
 
 spring:
   application:
@@ -9,12 +8,17 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/ZARAYACH/microservicesTp.git
+          uri: ${SPRING_CLOUD_CONFIG_SERVER_GIT_URI:https://github.com/ZARAYACH/microservicesTp.git}
           clone-on-start: true
-          default-label: master
-          search-paths: configFiles
-
+          default-label: ${SPRING_CLOUD_CONFIG_SERVER_DEFAULT_LABELS:master}
+          search-paths: ${SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH_PATHS:configFiles}
   security:
     user:
       password: admin
       name: admin
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true

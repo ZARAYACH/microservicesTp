@@ -1,0 +1,123 @@
+services:
+  ordersapp:
+    container_name: order
+    build:
+      context: orders
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ordersdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_URI: http://servicediscovery/eureka
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  customerapp:
+    container_name: customer
+    build:
+      context: customer
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ordersdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_URI: http://servicediscovery/eureka
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  productapp:
+    container_name: product
+    build:
+      context: products
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ordersdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_URI: http://servicediscovery/eureka
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  servicediscovery:
+    container_name: serviceDiscovery
+    build:
+      context: serviceDiscovery
+      dockerfile: Dockerfile
+    ports:
+      - "8761:80"
+    environment:
+      SERVER_PORT: 80
+      EUREKA_URI: http://servicediscovery/eureka
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  confserver:
+    container_name: confServer
+    build:
+      context: confServer
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8080"
+    environment:
+      SERVER_PORT: 8080
+      EUREKA_URI: http://servicediscovery/eureka
+      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/ZARAYACH/microservicesTp.git
+      SPRING_CLOUD_CONFIG_SERVER_DEFAULT_LABELS: master
+      SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH_PATHS: configFiles
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  adminserver:
+    container_name: adminServer
+    build:
+      context: adminServer
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8080"
+    environment:
+      SERVER_PORT: 8080
+      EUREKA_URI: http://servicediscovery/eureka
+      SPRING_CLOUD_CONFIG_SERVER_DEFAULT_LABELS: maser
+      SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH_PATHS: configFiles
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:9.2.0
+    container_name: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=ordersdb
+    volumes:
+      - /data:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+networks:
+  app-network:
